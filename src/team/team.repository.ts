@@ -31,7 +31,7 @@ export class TeamRepository {
           model: Coach,
           include: [
             {
-              model: User, // fetch coach's user details (email, name, etc.)
+              model: User, 
             },
           ],
         },

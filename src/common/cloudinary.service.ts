@@ -27,7 +27,6 @@ export class CloudinaryService {
     });
   }
 
-  // Upload an Express.Multer.File
   async uploadFile(file: Express.Multer.File, folder = 'teams'): Promise<string> {
     if (!file?.buffer) {
       throw new InternalServerErrorException('File buffer is missing. Ensure Multer is configured with memoryStorage.');

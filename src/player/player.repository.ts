@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Player } from './entities/player.entity';
-import { CreatePlayerDto } from './dto/create-player.dto';
 import { CreationAttributes } from 'sequelize';
 import { UpdatePlayerStatusDto } from './dto/update-player-status.dto';
 

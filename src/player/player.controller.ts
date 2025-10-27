@@ -30,7 +30,6 @@ import { PLAYER_MESSAGES } from './player.constant';
 import { ResponseService } from 'src/common/response.service';
 import * as multer from 'multer';
 import type { Response } from 'express';
-import { catchError } from 'rxjs';
 import { UpdatePlayerStatusDto } from './dto/update-player-status.dto';
 
 @ApiTags('Player')
@@ -64,7 +63,7 @@ export class PlayerController {
   @UseInterceptors(
     FileInterceptor('photo', {
       storage: multer.memoryStorage(),
-      limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
+      limits: { fileSize: 2 * 1024 * 1024 },
       fileFilter: (req, file, cb) => {
         const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
         if (!allowedTypes.includes(file.mimetype)) {

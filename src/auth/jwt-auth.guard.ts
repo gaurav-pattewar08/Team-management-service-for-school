@@ -1,4 +1,3 @@
-// src/auth/jwt-auth.guard.ts
 
 import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard as PassportAuthGuard } from '@nestjs/passport';
