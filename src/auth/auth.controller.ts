@@ -27,6 +27,7 @@ import {
 import { Role } from 'src/common/roles.enum';
 import { LoginDto } from './dto/login.dto';
 import { Public } from './public.decorator';
+import { AUTH_ERRORS } from './auth.constants';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -173,7 +174,7 @@ export class AuthController {
       return this.responseService.send({
         res,
         success: false,
-        message: error.message || 'Internal server error',
+        message: error.message || AUTH_ERRORS.INVALID_CREDENTIALS,
         data: null,
         statusCode: error.status || HttpStatus.INTERNAL_SERVER_ERROR,
       });
@@ -196,7 +197,7 @@ export class AuthController {
       return this.responseService.send({
         res,
         success: false,
-        message: err.message || 'Verification failed',
+        message: err.message || AUTH_ERRORS.EMAIL_VERIFICATION_FAILED,
         data: null,
         statusCode: err.status || HttpStatus.BAD_REQUEST,
       });

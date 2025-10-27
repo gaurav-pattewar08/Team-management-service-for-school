@@ -9,4 +9,5 @@ export const PLAYER_MESSAGES = {
   UNAUTHORIZED: 'You can only add players to your own team',
   INVALID_FILE_TYPE: 'Invalid player photo type. Only JPG, JPEG, and PNG allowed.',
   FILE_TOO_LARGE: 'Photo size exceeds 2MB limit.',
+  UPDATED_SUCCESS: 'Player status updated successfully',
 };

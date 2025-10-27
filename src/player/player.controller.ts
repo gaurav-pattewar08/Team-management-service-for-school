@@ -117,7 +117,7 @@ export class PlayerController {
     return this.responseService.send({
         res,
         success: true,
-        message: "Player status updated successfully.",
+        message: PLAYER_MESSAGES.UPDATED_SUCCESS,
         data: null,
         statusCode: HttpStatus.OK,
       });
