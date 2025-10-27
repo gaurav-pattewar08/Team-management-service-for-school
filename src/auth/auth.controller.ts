@@ -6,8 +6,6 @@ import {
   HttpStatus,
   Query,
   Get,
-  UseGuards,
-  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ResponseService } from 'src/common/response.service';
@@ -29,10 +27,6 @@ import {
 import { Role } from 'src/common/roles.enum';
 import { LoginDto } from './dto/login.dto';
 import { Public } from './public.decorator';
-import * as authConstant from './auth.constant';
-import { Roles } from './roles.decorator';
-import { RolesGuard } from './roles.guard';
-import { CoachVerifiedGuard } from './coach-verification.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -209,15 +203,4 @@ export class AuthController {
     }
   }
 
-  // @ApiOperation({ summary: 'JWT token' })
-  // @ApiBearerAuth('access-token')
-  // @UseGuards(RolesGuard,CoachVerifiedGuard)
-  // @Roles(Role.COACH,Role.ADMIN)
-  // @Get('profile')
-  // getProfile(@Req() req: authConstant.AuthenticatedRequest) {
-  //   return {
-  //     message: 'Access granted!',
-  //     user: req.user,
-  //   };
-  // }
 }
