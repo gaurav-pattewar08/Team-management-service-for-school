@@ -50,7 +50,7 @@ export class TeamService {
   }
 
   async getTeamByCoach(coachId: string) {
-    return this.teamRepo.findByCoachId(coachId);
+    return await this.teamRepo.findByCoachId(coachId);
   }
 
   async submitTeam(coachId: string) {
@@ -79,7 +79,7 @@ export class TeamService {
   `,
     );
 
-    const admin = await this.userService.getAdminDetails(); 
+    const admin = await this.userService.getAdminDetails();
 
     await this.mailerService.sendMail(
       admin!.email,
@@ -96,6 +96,25 @@ export class TeamService {
   }
 
   async getTeamById(id: string) {
-    return this.teamRepo.findById(id);
+    return await this.teamRepo.findById(id);
+  }
+
+  async getAllTeams() {
+    const teams = await this.teamRepo.findAll();
+    const formattedTeams = teams.map((team) => {
+      const formattedTeam = team.get({ plain: true });
+      return {
+        id: formattedTeam.id,
+        name: formattedTeam.name,
+        logoUrl: formattedTeam.logoUrl,
+        createdAt: formattedTeam.createdAt,
+        updatedAt: formattedTeam.updatedAt,
+        coachName: formattedTeam.coach?.user?.name || null,
+        coachEmail: formattedTeam.coach?.user?.email || null,
+        players: formattedTeam.players || [],
+      };
+    });
+
+    return { message: TEAM_MESSAGES.TEAMS_FETCHED, teams: formattedTeams };
   }
 }

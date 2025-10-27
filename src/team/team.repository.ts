@@ -11,31 +11,64 @@ import { Player } from 'src/player/entities/player.entity';
 export class TeamRepository {
   constructor(@InjectModel(Team) private readonly teamModel: typeof Team) {}
 
-   create(data: CreationAttributes<Team>) {
-    return this.teamModel.create(data);
+  async create(data: CreationAttributes<Team>) {
+    return await this.teamModel.create(data);
   }
 
-
-  findByCoachId(coachId: string) {
-    return this.teamModel.findOne({ where: { coachId }, include: [Player]});
+  async findByCoachId(coachId: string) {
+    return await this.teamModel.findOne({
+      where: { coachId },
+      include: [Player],
+    });
   }
 
-  findByName(name: string) {
-    return this.teamModel.findOne({ where: { name } });
+  async findByName(name: string) {
+    return await this.teamModel.findOne({ where: { name } });
   }
 
-  findById(id: string) {
-    return this.teamModel.findByPk(id, {
+  async findById(id: string) {
+    return await this.teamModel.findByPk(id, {
       include: [
         {
           model: Coach,
           include: [
             {
-              model: User, 
+              model: User,
             },
           ],
         },
       ],
+    });
+  }
+
+  async findAll() {
+    return await this.teamModel.findAll({
+      include: [
+        {
+          model: Coach,
+          as: 'coach',
+          include: [
+            {
+              model: User,
+              as: 'user',
+              attributes: ['name', 'email'],
+            },
+          ],
+          attributes: ['id'],
+        },
+        {
+          model: Player,
+          attributes: [
+            'id',
+            'name',
+            'dob',
+            'jerseyNumber',
+            'photoUrl',
+            'isApproved',
+          ],
+        },
+      ],
+      order: [['createdAt', 'DESC']],
     });
   }
 }

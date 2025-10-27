@@ -16,11 +16,11 @@ export class CoachRepository {
     } 
 
     async findCoachBySchoolId(schoolId: string) {
-    return this.coachModel.findOne({ where: { schoolId } });
+    return await this.coachModel.findOne({ where: { schoolId } });
   }
 
   async findByPk(id: string) {
-    return this.coachModel.findByPk(id, {
+    return await this.coachModel.findByPk(id, {
       include: [
         {
           model: User,
@@ -31,7 +31,7 @@ export class CoachRepository {
   }
 
   async findCoachByUserId(userId: string) {
-    return this.coachModel.findOne({ where: { userId } });
+    return await this.coachModel.findOne({ where: { userId } });
   }
   
 }

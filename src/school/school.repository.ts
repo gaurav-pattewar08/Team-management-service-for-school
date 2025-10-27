@@ -15,15 +15,15 @@ export class SchoolRepository {
       );
     } 
 
-  findAll() {
-    return this.schoolModel.findAll();
+ async findAll() {
+    return await this.schoolModel.findAll();
   }
 
-  findOneById(id: string) {
-    return this.schoolModel.findByPk(id);
+  async findOneById(id: string) {
+    return await this.schoolModel.findByPk(id);
   }
 
-  findByNameAndCity(name: string, city: string) {
-    return this.schoolModel.findOne({ where: { name, city } });
+  async findByNameAndCity(name: string, city: string) {
+    return await this.schoolModel.findOne({ where: { name, city } });
   }
 }

@@ -17,10 +17,10 @@ export class UserRepository {
     } 
 
 async findByEmail(email: string) {
-    return this.userModel.findOne({ where: { email } });
+    return await this.userModel.findOne({ where: { email } });
   }
  async getAdmin() {
-    return this.userModel.findOne({ where: { role: Role.ADMIN } });
+    return await this.userModel.findOne({ where: { role: Role.ADMIN } });
   }
 }
 

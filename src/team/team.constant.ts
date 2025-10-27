@@ -11,6 +11,8 @@ export const TEAM_MESSAGES = {
   TEAM_SUBMITTED: 'Team submitted successfully for the tournament',
   MIN_PLAYERS_REQUIRED: 'At least 11 players are required to submit the team',
   MAX_PLAYERS_EXCEEDED: 'Cannot have more than 15 players in a team',
+  TEAMS_FETCHED: 'Teams fetched successfully',
+  FAILED_TO_FETCH_TEAMS: 'Failed to fetch teams',
 };
 
 

@@ -18,14 +18,14 @@ export class SchoolService {
       );
     }
 
-    return this.schoolRepository.create(createSchoolDto);
+    return await this.schoolRepository.create(createSchoolDto);
   }
 
-  findOneById(id: string) {
-    return this.schoolRepository.findOneById(id);
+  async findOneById(id: string) {
+    return await this.schoolRepository.findOneById(id);
   }
 
-  findByNameAndCity(name: string, city: string) {
-    return this.schoolRepository.findByNameAndCity(name, city);
+  async findByNameAndCity(name: string, city: string) {
+    return await this.schoolRepository.findByNameAndCity(name, city);
   }
 }

@@ -6,18 +6,18 @@ import { CreateCoachDto } from './dto/create-coach.dto';
 export class CoachService {
   constructor(private readonly coachRepository: CoachRepository) {}
 
-  create(createCoachDto: CreateCoachDto) {
-    return this.coachRepository.create(createCoachDto);
+  async create(createCoachDto: CreateCoachDto) {
+    return await this.coachRepository.create(createCoachDto);
   }
 
   async findBySchoolId(schoolId: string) {
-    return this.coachRepository.findCoachBySchoolId(schoolId);
+    return await this.coachRepository.findCoachBySchoolId(schoolId);
   }
-   findById(id: string) {
-    return this.coachRepository.findByPk(id);
+   async findById(id: string) {
+    return await this.coachRepository.findByPk(id);
   }
 
   async findByUserId(userId: string) {
-    return this.coachRepository.findCoachByUserId(userId);
+    return await this.coachRepository.findCoachByUserId(userId);
   }
 }

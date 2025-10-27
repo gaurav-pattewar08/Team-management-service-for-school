@@ -9,6 +9,7 @@ import {
   BadRequestException,
   Res,
   HttpStatus,
+  Get,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TeamService } from './team.service';
@@ -128,5 +129,33 @@ export class TeamController {
       data: result.team,
       statusCode: HttpStatus.OK,
     });
+  }
+
+  @Get('all')
+  @ApiBearerAuth('access-token')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiOperation({
+    summary: 'Get all teams with coach and players (Admin only)',
+  })
+  async getAllTeams(@Res() res: Response) {
+    try {
+      const teams = await this.teamService.getAllTeams();
+      return this.responseService.send({
+        res,
+        success: true,
+        message: teams.message,
+        data: teams.teams,
+        statusCode: HttpStatus.OK,
+      });
+    } catch (error) {
+      return this.responseService.send({
+        res,
+        success: false,
+        message: error.message || TEAM_MESSAGES.FAILED_TO_FETCH_TEAMS,
+        data: null,
+        statusCode: error.status || HttpStatus.INTERNAL_SERVER_ERROR,
+      });
+    }
   }
 }

@@ -6,16 +6,16 @@ import { CreateUserDto } from './dto/create-user.dto';
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  findByEmail(email: string) {
-    return this.userRepository.findByEmail(email);
+  async findByEmail(email: string) {
+    return await this.userRepository.findByEmail(email);
   }
 
-  create(createUserDto: CreateUserDto) {
-    return this.userRepository.create(createUserDto);
+  async create(createUserDto: CreateUserDto) {
+    return await this.userRepository.create(createUserDto);
   }
 
-  getAdminDetails() {
-    return this.userRepository.getAdmin();
+  async getAdminDetails() {
+    return await this.userRepository.getAdmin();
   }
 
 
