@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, Res, HttpStatus, UseGuards } from '@nestjs/common';
 import { SchoolService } from './school.service';
 import { CreateSchoolDto } from './dto/create-school.dto';
 import { ResponseService } from 'src/common/response.service';
@@ -11,9 +11,13 @@ import {
   ApiInternalServerErrorResponse,
   ApiConflictResponse,
   ApiBody,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { SCHOOL_ERRORS, SCHOOL_MESSAGES } from './school.constants';
 import { Public } from 'src/auth/public.decorator';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/common/roles.enum';
 
 @ApiTags('Schools')
 @Controller('schools')
@@ -24,7 +28,9 @@ export class SchoolController {
   ) {}
 
   @Post()
-  @Public()
+  @ApiBearerAuth('access-token')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Create a new school' })
   @ApiBody({ type: CreateSchoolDto })
   @ApiCreatedResponse({

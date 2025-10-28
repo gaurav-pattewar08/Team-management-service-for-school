@@ -11,9 +11,10 @@ import { ResponseService } from 'src/common/response.service';
 import { PlayerModule } from 'src/player/player.module';
 import { MailerService } from 'src/common/mailer.service';
 import { UserModule } from 'src/user/user.module';
+import { SchoolModule } from 'src/school/school.module';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Team]),CoachModule,forwardRef(() => PlayerModule),UserModule],
+  imports: [SequelizeModule.forFeature([Team]),CoachModule,forwardRef(() => PlayerModule),UserModule,SchoolModule],
   controllers: [TeamController],
   providers: [TeamService,TeamRepository,CloudinaryService,CoachVerifiedGuard,ResponseService,MailerService],
   exports: [TeamService,TeamRepository],

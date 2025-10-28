@@ -8,6 +8,8 @@ import { PlayerService } from 'src/player/player.service';
 import { MailerService } from 'src/common/mailer.service';
 import { CoachService } from 'src/coach/coach.service';
 import { UserService } from 'src/user/user.service';
+import { SchoolService } from 'src/school/school.service';
+import { SCHOOL_ERRORS } from 'src/school/school.constants';
 
 @Injectable()
 export class TeamService {
@@ -18,6 +20,7 @@ export class TeamService {
     private readonly mailerService: MailerService,
     private readonly coachServce: CoachService,
     private readonly userService: UserService,
+    private readonly schoolService: SchoolService,
   ) {}
 
   private validateLogo(file: Express.Multer.File) {
@@ -116,5 +119,40 @@ export class TeamService {
     });
 
     return { message: TEAM_MESSAGES.TEAMS_FETCHED, teams: formattedTeams };
+  }
+
+  async getTeamBySchoolId(schoolId: string) {
+    const schoolDetails = await this.schoolService.findOneById(schoolId);
+    if (!schoolDetails) {
+      throw new BadRequestException(SCHOOL_ERRORS.SCHOOL_NOT_FOUND);
+    }
+
+    const coachDetails = await this.coachServce.findBySchoolId(schoolId);
+    if (!coachDetails) {
+      throw new BadRequestException(TEAM_MESSAGES.COACH_NOT_FOUND);
+    }
+
+    const teamDetails = await this.teamRepo.getByCoachId(coachDetails.id);
+    if (!teamDetails) {
+      throw new BadRequestException(TEAM_MESSAGES.TEAM_NOT_FOUND);
+    }
+
+    const formattedTeamDetails = teamDetails.get({ plain: true });
+    return {
+      schoolName: schoolDetails.name,
+      teamName: formattedTeamDetails.name,
+      teamLogoUrl: formattedTeamDetails.logoUrl,
+      coachName: formattedTeamDetails.coach?.user?.name,
+      coachEmail: formattedTeamDetails.coach?.user?.email,
+      players: formattedTeamDetails.players?.map((player) => ({
+        name: player.name,
+        dob: player.dob,
+        age: player.age,
+        jerseyNumber: player.jerseyNumber,
+        photoUrl: player.photoUrl,
+        isApproved: player.isApproved,
+      })),
+    };
+    
   }
 }

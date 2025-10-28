@@ -71,4 +71,38 @@ export class TeamRepository {
       order: [['createdAt', 'DESC']],
     });
   }
+
+  async getByCoachId(coachId: string): Promise<Team | null> {
+    return await this.teamModel.findOne({
+      where: { coachId },
+      include: [
+        {
+          model: Coach,
+          as: 'coach',
+          include: [
+            {
+              model: User,
+              as: 'user',
+              attributes: ['id', 'name', 'email', 'role'],
+            },
+          ],
+          attributes: ['id', 'isVerified', 'schoolId'],
+        },
+        {
+          model: Player,
+          as: 'players',
+          attributes: [
+            'id',
+            'name',
+            'dob',
+            'age',
+            'jerseyNumber',
+            'photoUrl',
+            'isApproved',
+          ],
+        },
+      ],
+      attributes: ['id', 'name'],
+    });
+  }
 }

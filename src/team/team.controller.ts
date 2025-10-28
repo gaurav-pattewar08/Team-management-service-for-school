@@ -10,6 +10,7 @@ import {
   Res,
   HttpStatus,
   Get,
+  Param,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TeamService } from './team.service';
@@ -20,6 +21,8 @@ import {
   ApiConsumes,
   ApiBody,
   ApiOperation,
+  ApiParam,
+  ApiResponse,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
@@ -155,6 +158,43 @@ export class TeamController {
         message: error.message || TEAM_MESSAGES.FAILED_TO_FETCH_TEAMS,
         data: null,
         statusCode: error.status || HttpStatus.INTERNAL_SERVER_ERROR,
+      });
+    }
+  }
+
+  @Get('school/:schoolId')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiOperation({ summary: 'Get coach, team and players by school ID' })
+  @ApiParam({
+    name: 'schoolId',
+    description: 'UUID of the school',
+    type: String,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Fetched coach, team, and players successfully',
+  })
+  async getCoachTeamPlayersBySchool(
+    @Param('schoolId') schoolId: string,
+    @Res() res: Response,
+  ) {
+    try {
+      const data = await this.teamService.getTeamBySchoolId(schoolId);
+      return this.responseService.send({
+        res,
+        success: true,
+        message: TEAM_MESSAGES.FETCH_SUCCESS,
+        data,
+        statusCode: HttpStatus.OK,
+      });
+    } catch (error) {
+      return this.responseService.send({
+        res,
+        success: false,
+        message: error.message,
+        data: null,
+        statusCode: error.status || HttpStatus.BAD_REQUEST,
       });
     }
   }

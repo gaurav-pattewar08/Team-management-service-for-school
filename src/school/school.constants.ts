@@ -4,6 +4,7 @@ export const SCHOOL_ERRORS = {
   DUPLICATE_SCHOOL: (name: string, city: string) =>
     `School with name "${name}" already exists in city "${city}"`,
   FAILED_TO_CREATE: 'Failed to create school',
+  SCHOOL_NOT_FOUND: 'School not found',
 };
 
 export const SCHOOL_MESSAGES = {

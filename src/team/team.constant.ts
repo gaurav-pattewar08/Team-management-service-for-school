@@ -13,6 +13,8 @@ export const TEAM_MESSAGES = {
   MAX_PLAYERS_EXCEEDED: 'Cannot have more than 15 players in a team',
   TEAMS_FETCHED: 'Teams fetched successfully',
   FAILED_TO_FETCH_TEAMS: 'Failed to fetch teams',
+  FETCH_SUCCESS: 'Coach, team, and players fetched successfully',
+  COACH_NOT_FOUND: 'No coach found for this school',
 };
 
 
