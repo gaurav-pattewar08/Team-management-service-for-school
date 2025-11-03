@@ -7,6 +7,7 @@ export const AUTH_ERRORS = {
   EMAIL_VERIFICATION_FAILED: 'Email verification failed',
   EMAIL_NOT_VERIFIED: 'Email is not verified',
   ACCESS_DENIDED: 'Access denied',
+  JWT_SECRET_REQUIRED: 'JWT_SECRET must be defined in environment configuration',
 };
 
 export const AUTH_SUCCESS = {

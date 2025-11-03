@@ -69,13 +69,15 @@ export class AuthService {
 
       const verificationLink = `${process.env.APP_URL}/auth/verify-email?token=${verificationToken}`;
 
-      await this.mailerService.sendMail(
-        email,
-        'Verify your email',
-        `<p>Hello ${name},</p>
-         <p>Click below to verify your email:</p>
-         <a href="${verificationLink}">Verify Email</a>`,
-      );
+      await this.mailerService.sendTemplateMail(
+      email,
+      'Verify your email - IPL App',
+      'verify-email',
+      {
+        name,
+        verificationLink,
+      },
+    );
     }
 
     return { message: AUTH_SUCCESS.REGISTRATION_SUCCESS };

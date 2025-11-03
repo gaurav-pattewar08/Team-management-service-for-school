@@ -10,4 +10,5 @@ export const COACH_ERRORS = {
 
   COACH_ALREADY_EXISTS: 'A coach is already assigned to this school',
   FAILED_TO_CREATE: 'Failed to create coach',
+  COACH_NOT_FOUND: 'Coach not found',
 };

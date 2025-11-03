@@ -71,28 +71,30 @@ export class TeamService {
     if (playersCount > 5)
       throw new BadRequestException(TEAM_MESSAGES.MAX_PLAYERS_EXCEEDED);
 
-    await this.mailerService.sendMail(
+    await this.mailerService.sendTemplateMail(
       coachDeatils!.user.email,
       'Team Registration Submitted Successfully',
-      `
-    <p>Dear ${coachDeatils?.user.name},</p>
-    <p>Your team "<strong>${teamData?.name}</strong>" has been successfully submitted with <strong>${playersCount}</strong> players.</p>
-    <p>We’ll notify you once it’s reviewed by the admin.</p>
-    <p>Thank you for being part of the IPL App!</p>
-  `,
+      'team-submitted-coach',
+      {
+        coachName: coachDeatils!.user.name,
+        teamName: teamData!.name,
+        playersCount: playersCount.toString(),
+      },
     );
 
     const admin = await this.userService.getAdminDetails();
 
-    await this.mailerService.sendMail(
+    await this.mailerService.sendTemplateMail(
       admin!.email,
       'New Team Submitted for Approval',
-      `
-        <p>Dear ${admin!.name},</p>
-        <p>A new team "<strong>${teamData!.name}</strong>" has been submitted by ${coachDeatils?.user.name} (${coachDeatils?.user.email}).</p>
-        <p>It has <strong>${playersCount}</strong> players. Please review and approve the team.</p>
-        <p>Thank you!</p>
-      `,
+      'team-submitted-admin',
+      {
+        adminName: admin!.name,
+        coachName: coachDeatils!.user.name,
+        coachEmail: coachDeatils!.user.email,
+        teamName: teamData!.name,
+        playersCount: playersCount.toString(),
+      },
     );
 
     return { message: TEAM_MESSAGES.TEAM_SUBMITTED, team };
@@ -153,6 +155,5 @@ export class TeamService {
         isApproved: player.isApproved,
       })),
     };
-    
   }
 }
