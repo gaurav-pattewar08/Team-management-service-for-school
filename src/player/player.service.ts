@@ -86,7 +86,7 @@ export class PlayerService {
 
   async updatePlayerStatus(dto: UpdatePlayerStatusDto) {
     const player = await this.playerRepo.findById(dto.playerId);
-    if (!player) throw new NotFoundException('Player not found.');
+    if (!player) throw new NotFoundException(PLAYER_MESSAGES.PLAYER_NOT_FOUND);
     const playerData = player?.get({ plain: true });
     await this.playerRepo.updatePlayerStatus(dto);
 

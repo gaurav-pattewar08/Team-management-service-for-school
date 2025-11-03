@@ -1,4 +1,3 @@
-// school/school.repository.ts
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { School } from './entities/school.entity';

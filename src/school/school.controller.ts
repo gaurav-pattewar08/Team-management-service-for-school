@@ -1,8 +1,14 @@
-import { Controller, Post, Body, Res, HttpStatus, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+  HttpStatus,
+  UseGuards,
+} from '@nestjs/common';
 import { SchoolService } from './school.service';
 import { CreateSchoolDto } from './dto/create-school.dto';
 import { ResponseService } from 'src/common/response.service';
-import type { Response } from 'express';
 import {
   ApiTags,
   ApiOperation,
@@ -83,24 +89,11 @@ export class SchoolController {
       },
     },
   })
-  async create(@Body() createSchoolDto: CreateSchoolDto, @Res() res: Response) {
-    try {
-      const schoolData = await this.schoolService.create(createSchoolDto);
-      return this.responseService.send({
-        res,
-        success: true,
-        message: SCHOOL_MESSAGES.CREATED,
-        data: schoolData,
-        statusCode: HttpStatus.CREATED,
-      });
-    } catch (error: any) {
-      return this.responseService.send({
-        res,
-        success: false,
-        message: error.message || SCHOOL_ERRORS.FAILED_TO_CREATE,
-        data: null,
-        statusCode: error.status || HttpStatus.INTERNAL_SERVER_ERROR,
-      });
-    }
+  async create(@Body() createSchoolDto: CreateSchoolDto) {
+    const schoolData = await this.schoolService.create(createSchoolDto);
+    return {
+      message: SCHOOL_MESSAGES.CREATED,
+      data: schoolData,
+    };
   }
 }

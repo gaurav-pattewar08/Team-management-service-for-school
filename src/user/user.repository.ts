@@ -1,4 +1,3 @@
-
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreationAttributes } from 'sequelize';
@@ -11,17 +10,15 @@ export class UserRepository {
   constructor(@InjectModel(User) private userModel: typeof User) {}
 
   async create(createUserDto: CreateUserDto) {
-      return await this.userModel.create(
-        createUserDto as CreationAttributes<User>
-      );
-    } 
+    return await this.userModel.create(
+      createUserDto as CreationAttributes<User>,
+    );
+  }
 
-async findByEmail(email: string) {
+  async findByEmail(email: string) {
     return await this.userModel.findOne({ where: { email } });
   }
- async getAdmin() {
+  async getAdmin() {
     return await this.userModel.findOne({ where: { role: Role.ADMIN } });
   }
 }
-
-

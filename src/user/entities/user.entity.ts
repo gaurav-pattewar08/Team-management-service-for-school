@@ -9,7 +9,7 @@ import { Role } from 'src/common/roles.enum';
 export class User extends Model<User> {
   @Column({
     type: DataType.UUID,
-    defaultValue: DataType.UUIDV4, // ✅ Automatically generate UUID
+    defaultValue: DataType.UUIDV4,
     primaryKey: true,
   })
   declare id: string;

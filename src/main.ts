@@ -4,25 +4,26 @@ import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from './common/http-exception.filter';
 import { ResponseService } from './common/response.service';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-
+import { ResponseInterceptor } from './common/response-interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // strips unknown properties
-      forbidNonWhitelisted: true, // throws error if extra properties are sent
-      transform: true, // automatically transforms payload to DTO class instances
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
     }),
   );
   const responseService = app.get(ResponseService);
   app.useGlobalFilters(new AllExceptionsFilter(responseService));
 
+  app.useGlobalInterceptors(new ResponseInterceptor());
+
   const config = new DocumentBuilder()
     .setTitle('My API')
     .setDescription('API documentation')
     .setVersion('1.0')
-    // Add JWT Bearer auth
     .addBearerAuth(
       {
         type: 'http',
@@ -31,7 +32,7 @@ async function bootstrap() {
         name: 'Authorization',
         in: 'header',
       },
-      'access-token', 
+      'access-token',
     )
     .build();
   const document = SwaggerModule.createDocument(app, config);

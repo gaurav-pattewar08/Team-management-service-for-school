@@ -10,12 +10,12 @@ export class CoachRepository {
   constructor(@InjectModel(Coach) private coachModel: typeof Coach) {}
 
   async create(createCoachDto: CreateCoachDto) {
-      return await this.coachModel.create(
-        createCoachDto as CreationAttributes<Coach>
-      );
-    } 
+    return await this.coachModel.create(
+      createCoachDto as CreationAttributes<Coach>,
+    );
+  }
 
-    async findCoachBySchoolId(schoolId: string) {
+  async findCoachBySchoolId(schoolId: string) {
     return await this.coachModel.findOne({ where: { schoolId } });
   }
 
@@ -33,5 +33,4 @@ export class CoachRepository {
   async findCoachByUserId(userId: string) {
     return await this.coachModel.findOne({ where: { userId } });
   }
-  
 }

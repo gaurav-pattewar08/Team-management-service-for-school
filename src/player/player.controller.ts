@@ -80,30 +80,16 @@ export class PlayerController {
     @UploadedFile() file: Express.Multer.File,
     @Body() body: CreatePlayerDto,
     @Req() req: any,
-    @Res() res: Response,
   ) {
-    try {
-      if (!file) throw new BadRequestException(PLAYER_MESSAGES.PHOTO_REQUIRED);
+    if (!file) throw new BadRequestException(PLAYER_MESSAGES.PHOTO_REQUIRED);
 
-      const coachId = req.user.coachId;
-      const result = await this.playerService.addPlayer(coachId, body, file);
+    const coachId = req.user.coachId;
+    const result = await this.playerService.addPlayer(coachId, body, file);
 
-      return this.responseService.send({
-        res,
-        success: true,
-        message: result.message,
-        data: result.player,
-        statusCode: HttpStatus.CREATED,
-      });
-    } catch (error) {
-      return this.responseService.send({
-        res,
-        success: false,
-        message: error.message,
-        data: null,
-        statusCode: error.statusCode,
-      });
-    }
+    return {
+      message: result.message,
+      data: result.player,
+    };
   }
 
   @Patch('status')
@@ -111,25 +97,11 @@ export class PlayerController {
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Admin can approve or reject a player' })
-  async updateStatus(@Body() dto: UpdatePlayerStatusDto,@Res() res: Response) {
-    try {
-    const result=  await this.playerService.updatePlayerStatus(dto);
-    return this.responseService.send({
-        res,
-        success: true,
-        message: PLAYER_MESSAGES.UPDATED_SUCCESS,
-        data: null,
-        statusCode: HttpStatus.OK,
-      });
-      
-    } catch (error) {
-      return this.responseService.send({
-        res,
-        success: false,
-        message: error.message,
-        data: null,
-        statusCode: error.statusCode,
-      });
-    }
+  async updateStatus(@Body() dto: UpdatePlayerStatusDto) {
+    const result = await this.playerService.updatePlayerStatus(dto);
+    return {
+      message: PLAYER_MESSAGES.UPDATED_SUCCESS,
+      data: null,
+    };
   }
 }

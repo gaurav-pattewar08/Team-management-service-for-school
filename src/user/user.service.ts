@@ -17,6 +17,4 @@ export class UserService {
   async getAdminDetails() {
     return await this.userRepository.getAdmin();
   }
-
-
 }

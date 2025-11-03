@@ -38,7 +38,10 @@ export class AuthService {
       );
 
       if (!school) {
-        throw new HttpException(AUTH_ERRORS.SCHOOL_NOT_FOUND, HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          AUTH_ERRORS.SCHOOL_NOT_FOUND,
+          HttpStatus.NOT_FOUND,
+        );
       }
 
       const existingCoach = await this.coachService.findBySchoolId(school.id);
@@ -70,17 +73,17 @@ export class AuthService {
       const verificationLink = `${process.env.APP_URL}/auth/verify-email?token=${verificationToken}`;
 
       await this.mailerService.sendTemplateMail(
-      email,
-      'Verify your email - IPL App',
-      'verify-email',
-      {
-        name,
-        verificationLink,
-      },
-    );
+        email,
+        'Verify your email - IPL App',
+        'verify-email',
+        {
+          name,
+          verificationLink,
+        },
+      );
     }
 
-    return { message: AUTH_SUCCESS.REGISTRATION_SUCCESS };
+    return { user };
   }
 
   async login(email: string, password: string) {
@@ -112,13 +115,16 @@ export class AuthService {
       const coach = await this.coachService.findById(payload.coachId);
 
       if (!coach) {
-        throw new HttpException(AUTH_ERRORS.COACH_NOT_FOUND, HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          AUTH_ERRORS.COACH_NOT_FOUND,
+          HttpStatus.NOT_FOUND,
+        );
       }
 
       coach.isVerified = true;
       await coach.save();
 
-      return { message: AUTH_SUCCESS.EMAIL_VERIFIED };
+      return true;
     } catch (error) {
       throw new HttpException(
         AUTH_ERRORS.EMAIL_VERIFICATION_FAILED,
@@ -127,4 +133,3 @@ export class AuthService {
     }
   }
 }
-

@@ -1,4 +1,3 @@
-// src/player/dto/update-player-status.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsBoolean } from 'class-validator';
 

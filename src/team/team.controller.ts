@@ -33,6 +33,7 @@ import * as multer from 'multer';
 import { TEAM_MESSAGES } from './team.constant';
 import { ResponseService } from 'src/common/response.service';
 import type { Response } from 'express';
+import { COACH_ERRORS } from 'src/coach/coach.constant';
 
 @ApiTags('Team')
 @ApiBearerAuth()
@@ -80,36 +81,18 @@ export class TeamController {
     @UploadedFile() file: Express.Multer.File,
     @Body() body: CreateTeamDto,
     @Req() req: any,
-    @Res() res: Response,
   ) {
-    try {
-      if (!file) throw new BadRequestException(TEAM_MESSAGES.LOGO_REQUIRED);
+    if (!file) throw new BadRequestException(TEAM_MESSAGES.LOGO_REQUIRED);
 
-      const coachId = req.user.coachId;
-      if (!coachId) throw new BadRequestException('Invalid coach credentials.');
+    const coachId = req.user.coachId;
+    if (!coachId) throw new BadRequestException('Invalid coach credentials.');
 
-      const result = await this.teamService.createTeam(
-        coachId,
-        file,
-        body.name,
-      );
+    const result = await this.teamService.createTeam(coachId, file, body.name);
 
-      return this.responseService.send({
-        res,
-        success: true,
-        message: result.message,
-        data: result.team,
-        statusCode: HttpStatus.CREATED,
-      });
-    } catch (error) {
-      return this.responseService.send({
-        res,
-        success: false,
-        message: error.message,
-        data: null,
-        statusCode: error.statusCode,
-      });
-    }
+    return {
+      message: result.message,
+      data: result.team,
+    };
   }
 
   @Post('submit')
@@ -119,19 +102,16 @@ export class TeamController {
   @ApiOperation({
     summary: 'Submit team for approval (min 11 players, max 15)',
   })
-  async submitTeam(@Req() req: any, @Res() res: Response) {
+  async submitTeam(@Req() req: any) {
     const coachId = req.user.coachId;
-    if (!coachId) throw new BadRequestException('Invalid coach credentials.');
+    if (!coachId) throw new BadRequestException(COACH_ERRORS.USER_ID_REQUIRED);
 
     const result = await this.teamService.submitTeam(coachId);
 
-    return this.responseService.send({
-      res,
-      success: true,
+    return {
       message: result.message,
       data: result.team,
-      statusCode: HttpStatus.OK,
-    });
+    };
   }
 
   @Get('all')
@@ -141,25 +121,12 @@ export class TeamController {
   @ApiOperation({
     summary: 'Get all teams with coach and players (Admin only)',
   })
-  async getAllTeams(@Res() res: Response) {
-    try {
-      const teams = await this.teamService.getAllTeams();
-      return this.responseService.send({
-        res,
-        success: true,
-        message: teams.message,
-        data: teams.teams,
-        statusCode: HttpStatus.OK,
-      });
-    } catch (error) {
-      return this.responseService.send({
-        res,
-        success: false,
-        message: error.message || TEAM_MESSAGES.FAILED_TO_FETCH_TEAMS,
-        data: null,
-        statusCode: error.status || HttpStatus.INTERNAL_SERVER_ERROR,
-      });
-    }
+  async getAllTeams() {
+    const teams = await this.teamService.getAllTeams();
+    return {
+      message: teams.message,
+      data: teams.teams,
+    };
   }
 
   @Get('school/:schoolId')
@@ -175,27 +142,11 @@ export class TeamController {
     status: 200,
     description: 'Fetched coach, team, and players successfully',
   })
-  async getCoachTeamPlayersBySchool(
-    @Param('schoolId') schoolId: string,
-    @Res() res: Response,
-  ) {
-    try {
-      const data = await this.teamService.getTeamBySchoolId(schoolId);
-      return this.responseService.send({
-        res,
-        success: true,
-        message: TEAM_MESSAGES.FETCH_SUCCESS,
-        data,
-        statusCode: HttpStatus.OK,
-      });
-    } catch (error) {
-      return this.responseService.send({
-        res,
-        success: false,
-        message: error.message,
-        data: null,
-        statusCode: error.status || HttpStatus.BAD_REQUEST,
-      });
-    }
+  async getCoachTeamPlayersBySchool(@Param('schoolId') schoolId: string) {
+    const data = await this.teamService.getTeamBySchoolId(schoolId);
+    return {
+      message: TEAM_MESSAGES.FETCH_SUCCESS,
+      data,
+    };
   }
 }

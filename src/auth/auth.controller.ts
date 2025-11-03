@@ -27,7 +27,7 @@ import {
 import { Role } from 'src/common/roles.enum';
 import { LoginDto } from './dto/login.dto';
 import { Public } from './public.decorator';
-import { AUTH_ERRORS } from './auth.constants';
+import { AUTH_ERRORS, AUTH_SUCCESS } from './auth.constants';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -92,25 +92,12 @@ export class AuthController {
       },
     },
   })
-  async register(@Body() body: RegisterDto, @Res() res: Response) {
-    try {
-      const user = await this.authService.register(body);
-      return this.responseService.send({
-        res,
-        success: true,
-        message: USER_MESSAGES.REGISTERED,
-        data: user,
-        statusCode: HttpStatus.CREATED,
-      });
-    } catch (error) {
-      return this.responseService.send({
-        res,
-        success: false,
-        message: error.message || USER_ERRORS.FAILED_TO_CREATE,
-        data: null,
-        statusCode: error.status || HttpStatus.INTERNAL_SERVER_ERROR,
-      });
-    }
+  async register(@Body() body: RegisterDto) {
+    const user = await this.authService.register(body);
+    return {
+      message: USER_MESSAGES.REGISTERED,
+      data: user,
+    };
   }
 
   @Post('login')
@@ -156,52 +143,25 @@ export class AuthController {
       },
     },
   })
-  async login(@Body() body: LoginDto, @Res() res: Response) {
-    try {
-      const { user, token } = await this.authService.login(
-        body.email,
-        body.password,
-      );
+  async login(@Body() body: LoginDto) {
+    const { user, token } = await this.authService.login(
+      body.email,
+      body.password,
+    );
 
-      return this.responseService.send({
-        res,
-        success: true,
-        message: USER_MESSAGES.LOGIN_SUCCESS,
-        data: { ...user.toJSON(), token },
-        statusCode: HttpStatus.OK,
-      });
-    } catch (error) {
-      return this.responseService.send({
-        res,
-        success: false,
-        message: error.message || AUTH_ERRORS.INVALID_CREDENTIALS,
-        data: null,
-        statusCode: error.status || HttpStatus.INTERNAL_SERVER_ERROR,
-      });
-    }
+    return {
+      message: USER_MESSAGES.LOGIN_SUCCESS,
+      data: { ...user.toJSON(), token },
+    };
   }
 
   @Get('verify-email')
   @Public()
-  async verifyEmail(@Query('token') token: string, @Res() res: Response) {
-    try {
-      const result = await this.authService.verifyEmail(token);
-      return this.responseService.send({
-        res,
-        success: true,
-        message: result.message,
-        data: null,
-        statusCode: HttpStatus.OK,
-      });
-    } catch (err) {
-      return this.responseService.send({
-        res,
-        success: false,
-        message: err.message || AUTH_ERRORS.EMAIL_VERIFICATION_FAILED,
-        data: null,
-        statusCode: err.status || HttpStatus.BAD_REQUEST,
-      });
-    }
+  async verifyEmail(@Query('token') token: string) {
+    const result = await this.authService.verifyEmail(token);
+    return {
+      message: AUTH_SUCCESS.EMAIL_VERIFIED,
+      data: null,
+    };
   }
-
 }
