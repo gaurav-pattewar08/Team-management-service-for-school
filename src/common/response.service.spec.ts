@@ -14,7 +14,6 @@ describe('ResponseService', () => {
 
     service = module.get<ResponseService>(ResponseService);
 
-    // Mock Express Response
     mockResponse = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn().mockReturnThis(),

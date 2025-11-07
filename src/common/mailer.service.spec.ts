@@ -3,18 +3,15 @@ import { MailerService } from './mailer.service';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-// Create a single mock transporter that will be reused
 const mockSendMail = jest.fn();
 const mockTransporter = {
   sendMail: mockSendMail,
 };
 
-// Mock nodemailer
 jest.mock('nodemailer', () => ({
   createTransport: jest.fn(() => mockTransporter),
 }));
 
-// Mock fs
 jest.mock('fs', () => ({
   readFileSync: jest.fn(),
 }));
@@ -32,7 +29,6 @@ describe('MailerService', () => {
 
     service = module.get<MailerService>(MailerService);
 
-    // Setup environment variables
     process.env.OUTLOOK_EMAIL = 'test@outlook.com';
     process.env.OUTLOOK_PASSWORD = 'test-password';
   });

@@ -243,7 +243,7 @@ describe('PlayerRepository', () => {
         isApproved: true,
       };
 
-      const mockUpdateResult = [1]; // Sequelize update returns [affectedRows]
+      const mockUpdateResult = [1];
       mockPlayerModel.update.mockResolvedValue(mockUpdateResult);
 
       const result = await repository.updatePlayerStatus(updateDto);
@@ -261,7 +261,7 @@ describe('PlayerRepository', () => {
         isApproved: true,
       };
 
-      const mockUpdateResult = [0]; // No rows affected
+      const mockUpdateResult = [0]; 
       mockPlayerModel.update.mockResolvedValue(mockUpdateResult);
 
       const result = await repository.updatePlayerStatus(updateDto);

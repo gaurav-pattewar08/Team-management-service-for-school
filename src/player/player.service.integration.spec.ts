@@ -95,12 +95,10 @@ describe('PlayerService Integration Tests', () => {
     teamRepo = module.get<TeamRepository>(TeamRepository);
     playerRepo = module.get<PlayerRepository>(PlayerRepository);
 
-    // Setup School, User, Coach
     testSchool = await schoolService.create({ name: 'Test School', city: 'Test City' });
     testUser = await userService.create({ name: 'Coach User', email: 'coach@test.com', password: 'hashedpassword', role: Role.COACH });
     testCoach = await coachService.create({ userId: testUser.id, schoolId: testSchool.id, isVerified: true });
 
-    // Create a team for the coach
     testTeam = await teamRepo.create({ name: 'Test Team', coachId: testCoach.id, logoUrl: 'http://fake-cloudinary-url/logo.png' } as any);
   });
 

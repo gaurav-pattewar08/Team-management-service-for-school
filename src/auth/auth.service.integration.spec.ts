@@ -210,7 +210,7 @@ describe('AuthService Integration Tests', () => {
       await authService.register(dto);
       const user = await userService.findByEmail(dto.email);
       expect(user?.password).not.toBe(dto.password);
-      expect(user?.password).toHaveLength(60); // bcrypt hash length
+      expect(user?.password).toHaveLength(60);
       const isValid = await bcrypt.compare(dto.password, user!.password);
       expect(isValid).toBe(true);
     });

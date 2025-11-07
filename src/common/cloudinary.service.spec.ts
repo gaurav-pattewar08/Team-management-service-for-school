@@ -4,7 +4,6 @@ import { ConfigService } from '@nestjs/config';
 import { InternalServerErrorException } from '@nestjs/common';
 import { v2 as cloudinary } from 'cloudinary';
 
-// Mock cloudinary
 jest.mock('cloudinary', () => ({
   v2: {
     config: jest.fn(),
@@ -14,7 +13,6 @@ jest.mock('cloudinary', () => ({
   },
 }));
 
-// Mock streamifier
 jest.mock('streamifier', () => ({
   createReadStream: jest.fn(),
 }));
@@ -37,7 +35,6 @@ describe('CloudinaryService', () => {
   };
 
   beforeEach(async () => {
-    // Setup upload_stream mock before creating service
     mockUploadStream = {
       end: jest.fn(),
     };
@@ -68,7 +65,6 @@ describe('CloudinaryService', () => {
   });
 
   it('should configure cloudinary on instantiation', () => {
-    // Create a new instance to trigger constructor
     const newService = new CloudinaryService(mockConfigService as any);
     expect(newService).toBeDefined();
     expect(cloudinary.config).toHaveBeenCalled();
@@ -89,7 +85,6 @@ describe('CloudinaryService', () => {
     };
 
     it('should successfully upload file with default folder', async () => {
-      // Mock successful upload
       const mockResult = {
         secure_url: 'https://res.cloudinary.com/test/image/upload/v123/test.jpg',
         public_id: 'test',
@@ -102,10 +97,8 @@ describe('CloudinaryService', () => {
       };
       streamifier.createReadStream.mockReturnValue(mockStream);
 
-      // Call the callback immediately before awaiting
       const uploadPromise = service.uploadFile(mockFile);
       
-      // Simulate the async callback
       setImmediate(() => {
         callbackFn(null, mockResult);
       });
