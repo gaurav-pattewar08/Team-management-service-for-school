@@ -15,6 +15,7 @@ import { PlayerModule } from './player/player.module';
     DatabaseModule,
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: process.env.NODE_ENV === 'production' ? '.env.docker' : '.env',
     }),
     SchoolModule,
     UserModule,
