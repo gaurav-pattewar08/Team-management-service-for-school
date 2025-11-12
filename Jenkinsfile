@@ -1,21 +1,10 @@
 pipeline {
     agent any
-
     stages {
-        stage('Start') {
-            agent{
-                docker{
-                    image 'node:22-alpine'
-                    reuseNode true
-                }
-            }
+        stage('Run Dev') {
             steps {
-                sh '''
-                   npm ci
-                   npm run start
-                '''
+                sh 'docker compose --profile dev up -d --build'
             }
         }
-       
     }
 }
