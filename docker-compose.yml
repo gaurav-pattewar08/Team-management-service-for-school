@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  app-dev:
+    container_name: nestjs-app-dev
+    build:
+      context: .
+      dockerfile: DockerFile.dev
+    env_file:
+      - .env.docker
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+      - /app/node_modules
+    profiles:
+      - dev
+  app-prod:
+    container_name: nestjs-app-prod
+    build:
+      context: .
+      dockerfile: DockerFile.prod
+    env_file:
+      - .env.docker
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    profiles:
+      - prod
+  db:
+    image: postgres:17-alpine
+    container_name: nestjs-db
+    env_file:
+      - .env.docker
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    profiles:
+      - dev
+      - prod
+
+volumes:
+  db-data:
